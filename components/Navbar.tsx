@@ -61,23 +61,29 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentView }) => {
       }
     };
 
-    updateIndicator();
+    // Small delay to ensure layout is settled
+    const timer = setTimeout(updateIndicator, 50);
     window.addEventListener('resize', updateIndicator);
-    return () => window.removeEventListener('resize', updateIndicator);
+    
+    return () => {
+      window.removeEventListener('resize', updateIndicator);
+      clearTimeout(timer);
+    };
   }, [currentView]);
 
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 glass-panel">
+      <nav className="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-border transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
           <div 
             className="flex items-center gap-2.5 cursor-pointer group select-none"
             onClick={() => onNavigate(ViewState.HOME)}
           >
-            <div className="w-7 h-7 bg-accent rounded-[6px] flex items-center justify-center group-hover:rotate-12 transition-transform duration-300 shadow-[0_0_15px_-5px_rgba(var(--accent)/0.5)]">
-              <div className="w-2.5 h-2.5 bg-accentFg rounded-[2px]" />
+            {/* Logo Mark - Green (Trust) */}
+            <div className="w-8 h-8 bg-accent-primary rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-300 shadow-sm">
+              <div className="w-3 h-3 bg-white rounded-sm" />
             </div>
             <span className="text-lg font-display font-bold tracking-tight text-textMain leading-none">
               WebCatalog<span className="text-textMuted font-normal">Pro</span>
@@ -85,7 +91,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentView }) => {
           </div>
 
           {/* Desktop Links Container */}
-          <div className="hidden md:flex items-center gap-1 relative" ref={navContainerRef}>
+          <div className="hidden md:flex items-center relative" ref={navContainerRef}>
             {NAV_LINKS.map(link => (
               <a 
                 key={link.label}
@@ -95,7 +101,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentView }) => {
                   e.preventDefault();
                   handleNavClick(link.label);
                 }}
-                className={`text-[13px] font-medium transition-colors px-4 py-5 select-none ${
+                className={`text-[13px] font-medium transition-colors px-5 py-5 select-none relative z-10 ${
                   isActive(link.label)
                   ? 'text-textMain' 
                   : 'text-textMuted hover:text-textMain'
@@ -105,29 +111,31 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentView }) => {
               </a>
             ))}
             
+            {/* Animated Indicator - Thin Green Line */}
             <div 
-                className="absolute bottom-0 h-[1.5px] bg-accent transition-all duration-300 ease-[cubic-bezier(0.2,1,0.4,1)]"
+                className="absolute bottom-0 h-[2px] bg-accent-primary rounded-t-full transition-all duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
                 style={{
-                    left: `${indicatorStyle.left + 16}px`, 
-                    width: `${indicatorStyle.width - 32}px`, 
+                    left: `${indicatorStyle.left + 20}px`, // Adjusted for padding
+                    width: `${indicatorStyle.width - 40}px`, // Adjusted for padding
                     opacity: indicatorStyle.opacity
                 }}
             />
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
              {/* Search */}
             <button 
-              className="p-2 text-textMuted hover:text-textMain transition-colors"
+              className="p-2 text-textMuted hover:text-textMain hover:bg-surfaceHighlight rounded-md transition-all"
               onClick={() => onNavigate(ViewState.EXPLORE)}
+              aria-label="Search"
             >
               <Search size={18} />
             </button>
             
             {/* Dashboard */}
             <button 
-              className={`hidden md:block p-2 transition-colors ${currentView === ViewState.DASHBOARD ? 'text-accent' : 'text-textMuted hover:text-textMain'}`}
+              className={`hidden md:block p-2 rounded-md transition-all ${currentView === ViewState.DASHBOARD ? 'text-accent-primary bg-accent-primary/10' : 'text-textMuted hover:text-textMain hover:bg-surfaceHighlight'}`}
               onClick={() => onNavigate(ViewState.DASHBOARD)}
               title="Dashboard"
             >
@@ -135,7 +143,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentView }) => {
             </button>
 
             {/* Divider */}
-            <div className="h-4 w-px bg-border hidden md:block mx-1"></div>
+            <div className="h-5 w-px bg-border hidden md:block"></div>
 
             {/* Theme Toggle */}
             <div className="hidden md:block">
@@ -143,10 +151,10 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentView }) => {
             </div>
 
             <div className="hidden md:flex gap-3 ml-1">
-               <Button variant="ghost" size="sm" onClick={() => onNavigate(ViewState.SIGN_IN)}>
+               <Button variant="ghost" size="sm" onClick={() => onNavigate(ViewState.SIGN_IN)} className="text-textSecondary">
                  Sign In
                </Button>
-               <Button variant="outline" size="sm" onClick={() => onNavigate(ViewState.SUBMIT)}>
+               <Button variant="primary" size="sm" onClick={() => onNavigate(ViewState.SUBMIT)}>
                   Submit Kit
                </Button>
             </div>
@@ -193,7 +201,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentView }) => {
               </div>
               <hr className="border-border" />
               <a href="#" onClick={(e) => { e.preventDefault(); onNavigate(ViewState.SIGN_IN); setIsMobileMenuOpen(false); }} className="text-textMain">Sign In</a>
-              <a href="#" onClick={(e) => { e.preventDefault(); onNavigate(ViewState.SUBMIT); setIsMobileMenuOpen(false); }} className="text-accent">Submit Kit</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); onNavigate(ViewState.SUBMIT); setIsMobileMenuOpen(false); }} className="text-accent-primary">Submit Kit</a>
               <a href="#" onClick={(e) => { e.preventDefault(); onNavigate(ViewState.DASHBOARD); setIsMobileMenuOpen(false); }} className="text-textMain">Dashboard</a>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
+import SignatureLine from '../components/SignatureLine';
 import { ViewState } from '../types';
 
 interface CategoriesProps {
@@ -53,17 +54,25 @@ const CATEGORIES = [
 
 const Categories: React.FC<CategoriesProps> = ({ onNavigate }) => {
   return (
-    <div className="pt-32 pb-20 px-6 max-w-[1400px] mx-auto min-h-screen">
+    <div className="pt-36 pb-20 px-6 max-w-[1400px] mx-auto min-h-screen">
       {/* Header */}
       <div className="text-center mb-16 animate-slide-up">
-        {/* Exact Pill Design Requested - Using Tertiary Color for variety or Accent */}
-        <div className="inline-block px-4 py-1.5 rounded-full border border-tertiary/30 text-tertiary text-sm font-medium bg-tertiary/5 mb-6">
+        {/* Info Pill -> Green (Primary) */}
+        <div className="inline-block px-4 py-1.5 rounded-full border border-accent-primary/20 text-accent-primary text-sm font-medium bg-accent-primary/5 mb-6">
           Categories
         </div>
-        <h1 className="text-4xl md:text-5xl font-display font-bold text-textMain mb-4">
-          Browse by Category
-        </h1>
-        <p className="text-textMuted max-w-xl mx-auto">
+        
+        <div className="w-fit mx-auto flex flex-col items-center">
+            <h1 className="text-4xl md:text-5xl font-display font-bold text-textMain mb-2 tracking-tighter">
+              Browse by Category
+            </h1>
+            {/* Constrain to ~50% width */}
+            <div className="w-1/2 min-w-[160px]">
+                <SignatureLine />
+            </div>
+        </div>
+        
+        <p className="text-textMuted max-w-xl mx-auto mt-6">
           Find the perfect website design for your industry or use case.
         </p>
       </div>
@@ -73,38 +82,39 @@ const Categories: React.FC<CategoriesProps> = ({ onNavigate }) => {
         {CATEGORIES.map((cat, i) => (
           <div 
             key={cat.id}
-            className="group relative rounded-2xl overflow-hidden bg-surface border border-border transition-all duration-300 flex flex-col cursor-pointer hover:border-accent/50 hover:shadow-premium"
+            className="group relative rounded-2xl overflow-hidden bg-surface border border-border transition-all duration-300 flex flex-col cursor-pointer hover:border-accent-primary/30 hover:shadow-premium hover:-translate-y-[2px]"
             style={{ animationDelay: `${i * 0.1}s` }}
             onClick={() => onNavigate?.(ViewState.EXPLORE)}
           >
-            {/* Image Section */}
+            {/* Image Section - Full Color by Default */}
             <div className="relative aspect-[16/10] overflow-hidden bg-surfaceHighlight">
                <img 
                  src={cat.image} 
                  alt={cat.title} 
-                 className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 saturate-0 group-hover:saturate-100"
+                 className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                />
-               <div className="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-90" />
+               <div className="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-80 group-hover:opacity-70 transition-opacity" />
             </div>
 
             {/* Content Section */}
             <div className="p-8 pt-0 flex flex-col flex-1 relative -mt-8">
                <div className="flex justify-between items-end mb-4">
-                  <h2 className="text-2xl font-bold font-display text-textMain group-hover:text-accent transition-colors">
+                  <h2 className="text-2xl font-bold font-display text-textMain group-hover:text-accent-primary transition-colors">
                     {cat.title}
                   </h2>
-                  <span className="px-2 py-1 bg-surfaceHighlight rounded text-xs text-textMuted font-mono border border-border group-hover:border-accent/20 group-hover:text-accent transition-colors">
+                  <span className="px-2 py-1 bg-surfaceHighlight rounded text-xs text-textMuted font-mono border border-border group-hover:border-accent-primary/20 group-hover:text-accent-primary transition-colors">
                     {cat.count}
                   </span>
                </div>
                
-               <p className="text-textMuted text-sm leading-relaxed mb-8 flex-1">
+               <p className="text-textMuted text-sm leading-relaxed mb-6 flex-1">
                  {cat.description}
                </p>
 
-               {/* Browse Link - Reveals on Hover */}
-               <div className="flex items-center gap-2 text-accent text-sm font-medium opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                  Browse {cat.title} <ArrowRight size={16} />
+               {/* Browse Link - Visible by default, Green, Medium Weight */}
+               <div className="flex items-center gap-2 text-accent-primary text-sm font-medium mt-auto pt-2 group-hover:text-accent-primary-dim transition-colors">
+                  Browse {cat.title} 
+                  <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
                </div>
             </div>
           </div>

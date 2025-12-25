@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Upload, Check, AlertCircle, Globe, Tag, Image as ImageIcon, FileText, ChevronRight, ChevronLeft, ShieldCheck, Info, Save, Cpu, Terminal } from 'lucide-react';
 import Button from '../components/Button';
+import SignatureLine from '../components/SignatureLine';
 
 const STEPS = [
   { id: 1, label: 'Manifest', icon: Globe },
@@ -105,12 +106,12 @@ const Submit: React.FC = () => {
   if (isSuccess) {
     return (
       <div className="pt-32 pb-20 px-6 min-h-[80vh] flex flex-col items-center justify-center animate-fade-in text-center max-w-md mx-auto">
-        <div className="w-20 h-20 bg-accent/10 text-accent rounded-full flex items-center justify-center mb-8 border border-accent/20 shadow-[0_0_30px_-10px_rgba(209,242,94,0.3)]">
+        <div className="w-20 h-20 bg-accent-primary/10 text-accent-primary rounded-full flex items-center justify-center mb-8 border border-accent-primary/20 shadow-[0_0_30px_-10px_rgba(var(--accent-primary)/0.2)]">
           <Terminal size={40} strokeWidth={1.5} />
         </div>
-        <h2 className="text-3xl font-display font-bold text-white mb-4">Submission Queued</h2>
-        <p className="text-textMuted mb-8 leading-relaxed">
-          Your repository <span className="text-white font-mono text-sm bg-white/10 px-1.5 py-0.5 rounded">{formData.projectName || 'Untitled'}</span> has been added to the audit queue. Expect a technical review within 48 hours.
+        <h2 className="text-3xl font-display font-bold text-textMain mb-4">Submission Queued</h2>
+        <p className="text-textSecondary mb-8 leading-relaxed">
+          Your repository <span className="text-textMain font-mono text-sm bg-surfaceHighlight px-1.5 py-0.5 rounded border border-border">{formData.projectName || 'Untitled'}</span> has been added to the audit queue. Expect a technical review within 48 hours.
         </p>
         <div className="flex gap-4">
             <Button variant="outline" onClick={() => window.location.href = '/'}>Return to Catalog</Button>
@@ -121,25 +122,29 @@ const Submit: React.FC = () => {
   }
 
   return (
-    <div className="pt-28 pb-20 px-6 max-w-7xl mx-auto animate-slide-up min-h-screen flex flex-col lg:flex-row gap-12">
+    <div className="pt-36 pb-20 px-6 max-w-7xl mx-auto animate-slide-up min-h-screen flex flex-col lg:flex-row gap-12">
       
       {/* LEFT COLUMN: Form Context */}
       <div className="lg:w-2/3">
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-4 text-textMuted text-xs font-mono uppercase tracking-widest">
-            <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+            <span className="w-2 h-2 rounded-full bg-accent-primary animate-pulse"></span>
             Creator Portal
           </div>
-          <h1 className="text-4xl font-display font-bold text-white mb-3">Submit Candidate for Audit</h1>
-          <p className="text-textMuted text-lg font-light">
-            We accept <span className="text-white font-medium">~5%</span> of submissions. Focus on code quality, type safety, and architecture.
+          <h1 className="text-4xl font-display font-bold text-textMain mb-3 tracking-tighter">Submit Candidate for Audit</h1>
+          {/* Constrained signature */}
+          <div className="w-24 mb-6">
+             <SignatureLine />
+          </div>
+          <p className="text-textSecondary text-lg font-light">
+            We accept <span className="text-textMain font-medium">~5%</span> of submissions. Focus on code quality, type safety, and architecture.
           </p>
         </div>
 
         {/* Stepper (Linear/Technical) */}
-        <div className="mb-12 border-b border-white/5 pb-6">
+        <div className="mb-12 border-b border-border pb-6">
           <div className="flex justify-between items-center relative">
-            <div className="absolute top-1/2 left-0 w-full h-px bg-white/5 -z-10" />
+            <div className="absolute top-1/2 left-0 w-full h-px bg-border -z-10" />
             
             {STEPS.map((step) => {
               const isActive = step.id === currentStep;
@@ -150,15 +155,15 @@ const Submit: React.FC = () => {
                   <div 
                     className={`w-8 h-8 rounded text-xs font-mono font-bold flex items-center justify-center transition-all duration-300 border ${
                       isActive 
-                        ? 'bg-accent text-black border-accent' 
+                        ? 'bg-accent-primary text-white border-accent-primary shadow-lg shadow-accent-primary/20' 
                         : isCompleted 
-                          ? 'bg-white/10 text-white border-transparent' 
-                          : 'bg-transparent text-textMuted border-white/10'
+                          ? 'bg-surfaceHighlight text-textMain border-border' 
+                          : 'bg-surface text-textMuted border-border'
                     }`}
                   >
                     {isCompleted ? <Check size={14} /> : step.id}
                   </div>
-                  <span className={`text-sm font-medium hidden sm:block ${isActive ? 'text-white' : 'text-textMuted'}`}>
+                  <span className={`text-sm font-medium hidden sm:block ${isActive ? 'text-textMain' : 'text-textMuted'}`}>
                     {step.label}
                   </span>
                 </div>
@@ -168,13 +173,13 @@ const Submit: React.FC = () => {
         </div>
 
         {/* Form Container */}
-        <div className="bg-[#0A0A0B] border border-white/10 rounded-xl p-8 relative overflow-hidden ring-1 ring-white/5">
+        <div className="bg-surface border border-border rounded-xl p-8 relative overflow-hidden shadow-soft">
            {/* Auto-save Indicator */}
            <div className="absolute top-6 right-6 flex items-center gap-2 text-[10px] font-mono uppercase tracking-wider transition-opacity duration-500">
              {isSaved ? (
-                <span className="text-textMuted flex items-center gap-1.5"><Save size={10} /> Draft Saved</span>
+                <span className="text-textMuted flex items-center gap-1.5"><Save size={12} /> Draft Saved</span>
              ) : (
-                <span className="text-accent flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-accent"></span> Saving...</span>
+                <span className="text-accent-tertiary flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-accent-tertiary"></span> Saving...</span>
              )}
            </div>
 
@@ -186,7 +191,7 @@ const Submit: React.FC = () => {
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label className="text-xs font-mono font-medium text-textMuted uppercase tracking-wider">Repository / Product Name</label>
+                        <label className="text-xs font-mono font-medium text-textSecondary uppercase tracking-wider">Repository / Product Name</label>
                         <input 
                           required
                           name="projectName"
@@ -194,11 +199,11 @@ const Submit: React.FC = () => {
                           onChange={handleInputChange}
                           type="text" 
                           placeholder="e.g. Next.js SaaS Starter"
-                          className="w-full bg-[#050505] border border-white/10 rounded-md px-4 py-3 text-white focus:border-accent/50 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-all font-medium placeholder:text-textMuted/30"
+                          className="w-full bg-surfaceHighlight border border-border rounded-md px-4 py-3 text-textMain focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary transition-all font-medium placeholder:text-textMuted/50"
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-xs font-mono font-medium text-textMuted uppercase tracking-wider">Production Demo URL</label>
+                        <label className="text-xs font-mono font-medium text-textSecondary uppercase tracking-wider">Production Demo URL</label>
                         <div className="relative">
                             <input 
                               required
@@ -207,7 +212,7 @@ const Submit: React.FC = () => {
                               onChange={handleInputChange}
                               type="url" 
                               placeholder="https://app.demo.com"
-                              className="w-full bg-[#050505] border border-white/10 rounded-md px-4 py-3 text-white focus:border-accent/50 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-all font-mono text-sm placeholder:text-textMuted/30"
+                              className="w-full bg-surfaceHighlight border border-border rounded-md px-4 py-3 text-textMain focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary transition-all font-mono text-sm placeholder:text-textMuted/50"
                             />
                             <div className="absolute right-3 top-1/2 -translate-y-1/2">
                                 <span className="flex w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]"></span>
@@ -218,7 +223,7 @@ const Submit: React.FC = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-xs font-mono font-medium text-textMuted uppercase tracking-wider">Primary Category</label>
+                      <label className="text-xs font-mono font-medium text-textSecondary uppercase tracking-wider">Primary Category</label>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                          {['SaaS', 'E-commerce', 'Agency', 'Portfolio', 'Fintech', 'AI Tool'].map(cat => (
                            <button
@@ -227,19 +232,19 @@ const Submit: React.FC = () => {
                              onClick={() => setFormData(prev => ({ ...prev, category: cat }))}
                              className={`px-4 py-3 rounded-md text-sm font-medium border transition-all text-left flex items-center justify-between ${
                                 formData.category === cat 
-                                  ? 'bg-accent/10 border-accent text-white' 
-                                  : 'bg-[#050505] border-white/10 text-textMuted hover:border-white/20 hover:text-white'
+                                  ? 'bg-accent-tertiary/10 border-accent-tertiary text-accent-tertiary' 
+                                  : 'bg-surfaceHighlight border-border text-textSecondary hover:border-borderHover hover:text-textMain'
                              }`}
                            >
                              {cat}
-                             {formData.category === cat && <Check size={14} className="text-accent" />}
+                             {formData.category === cat && <Check size={14} className="text-accent-tertiary" />}
                            </button>
                          ))}
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-xs font-mono font-medium text-textMuted uppercase tracking-wider">Technical Architecture</label>
+                      <label className="text-xs font-mono font-medium text-textSecondary uppercase tracking-wider">Technical Architecture</label>
                       <textarea 
                         required
                         name="description"
@@ -247,7 +252,7 @@ const Submit: React.FC = () => {
                         onChange={handleInputChange}
                         rows={6}
                         placeholder={"- Auth: NextAuth v5 with Middleware\n- DB: Supabase (Postgres) with RLS enabled\n- Payments: Stripe Connect webhooks\n- Emails: Resend React Templates"}
-                        className="w-full bg-[#050505] border border-white/10 rounded-md px-4 py-3 text-white focus:border-accent/50 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-all resize-none font-mono text-sm placeholder:text-textMuted/30 leading-relaxed"
+                        className="w-full bg-surfaceHighlight border border-border rounded-md px-4 py-3 text-textMain focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary transition-all resize-none font-mono text-sm placeholder:text-textMuted/50 leading-relaxed"
                       />
                       <p className="text-[10px] text-textMuted mt-1 flex items-center gap-1">
                          <Info size={10} /> List key modules. Be specific about versions and security patterns.
@@ -260,11 +265,11 @@ const Submit: React.FC = () => {
               {currentStep === 2 && (
                   <div className="space-y-8 animate-fade-in">
                     
-                    <div className="p-4 bg-accent/5 rounded border border-accent/10 flex gap-4 items-start">
-                        <AlertCircle className="text-accent shrink-0 mt-0.5" size={18} />
+                    <div className="p-4 bg-accent-tertiary/5 rounded border border-accent-tertiary/10 flex gap-4 items-start">
+                        <AlertCircle className="text-accent-tertiary shrink-0 mt-0.5" size={18} />
                         <div className="space-y-1">
-                            <p className="text-white text-sm font-bold">Standard Commission: 10%</p>
-                            <p className="text-textMuted text-xs leading-relaxed">
+                            <p className="text-textMain text-sm font-bold">Standard Commission: 10%</p>
+                            <p className="text-textSecondary text-xs leading-relaxed">
                                 You keep 90% of every sale. We handle global merchant-of-record compliance, tax collection, and fraud detection.
                             </p>
                         </div>
@@ -272,7 +277,7 @@ const Submit: React.FC = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-xs font-mono font-medium text-textMuted uppercase tracking-wider">License Price (USD)</label>
+                            <label className="text-xs font-mono font-medium text-textSecondary uppercase tracking-wider">License Price (USD)</label>
                             <div className="relative">
                                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-textMuted font-mono">$</span>
                                 <input 
@@ -283,12 +288,12 @@ const Submit: React.FC = () => {
                                     type="number" 
                                     min="0"
                                     placeholder="149"
-                                    className="w-full bg-[#050505] border border-white/10 rounded-md pl-8 pr-4 py-3 text-white focus:border-accent/50 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-all font-mono"
+                                    className="w-full bg-surfaceHighlight border border-border rounded-md pl-8 pr-4 py-3 text-textMain focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary transition-all font-mono"
                                 />
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <label className="text-xs font-mono font-medium text-textMuted uppercase tracking-wider">Core Tech Stack</label>
+                            <label className="text-xs font-mono font-medium text-textSecondary uppercase tracking-wider">Core Tech Stack</label>
                             <input 
                                 required
                                 name="techStack"
@@ -296,7 +301,7 @@ const Submit: React.FC = () => {
                                 onChange={handleInputChange}
                                 type="text" 
                                 placeholder="Next.js 14, Tailwind, Prisma, TRPC"
-                                className="w-full bg-[#050505] border border-white/10 rounded-md px-4 py-3 text-white focus:border-accent/50 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-all placeholder:text-textMuted/30"
+                                className="w-full bg-surfaceHighlight border border-border rounded-md px-4 py-3 text-textMain focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary transition-all placeholder:text-textMuted/50"
                             />
                         </div>
                     </div>
@@ -307,27 +312,27 @@ const Submit: React.FC = () => {
               {currentStep === 3 && (
                   <div className="space-y-8 animate-fade-in">
                     <div className="space-y-2">
-                        <label className="text-xs font-mono font-medium text-textMuted uppercase tracking-wider">Cover Asset</label>
+                        <label className="text-xs font-mono font-medium text-textSecondary uppercase tracking-wider">Cover Asset</label>
                         <div 
                             className={`border border-dashed rounded-xl p-16 text-center transition-all cursor-pointer group relative overflow-hidden ${
-                                formData.thumbnailName ? 'border-accent/50 bg-accent/5' : 'border-white/10 hover:border-white/20 bg-[#050505]'
+                                formData.thumbnailName ? 'border-accent-primary/50 bg-accent-primary/5' : 'border-border hover:border-accent-primary/30 bg-surfaceHighlight'
                             }`}
                             onClick={() => setFormData(prev => ({...prev, thumbnailName: 'cover_v1.png'}))}
                         >
                             {formData.thumbnailName ? (
                                 <div className="flex flex-col items-center">
-                                    <div className="w-12 h-12 bg-accent text-black rounded-lg flex items-center justify-center mb-4 shadow-lg shadow-accent/20">
+                                    <div className="w-12 h-12 bg-accent-primary text-white rounded-lg flex items-center justify-center mb-4 shadow-lg shadow-accent-primary/20">
                                         <Check size={24} />
                                     </div>
-                                    <p className="text-white font-medium text-lg">{formData.thumbnailName}</p>
-                                    <p className="text-accent text-sm mt-1">Ready for upload</p>
+                                    <p className="text-textMain font-medium text-lg">{formData.thumbnailName}</p>
+                                    <p className="text-accent-primary text-sm mt-1">Ready for upload</p>
                                 </div>
                             ) : (
                                 <div className="flex flex-col items-center">
-                                    <div className="w-12 h-12 bg-white/5 text-textMuted rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform group-hover:bg-white/10 group-hover:text-white">
+                                    <div className="w-12 h-12 bg-surface text-textMuted border border-border rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform group-hover:text-textMain">
                                         <Upload size={20} />
                                     </div>
-                                    <p className="text-white font-medium mb-2">Click to Upload Cover</p>
+                                    <p className="text-textMain font-medium mb-2">Click to Upload Cover</p>
                                     <p className="text-textMuted text-xs font-mono">PNG/JPG • Max 5MB • 16:10 Ratio</p>
                                 </div>
                             )}
@@ -340,32 +345,32 @@ const Submit: React.FC = () => {
               {currentStep === 4 && (
                   <div className="space-y-8 animate-fade-in">
                     
-                    <div className="bg-[#050505] rounded-lg border border-white/10 divide-y divide-white/5">
+                    <div className="bg-surfaceHighlight rounded-lg border border-border divide-y divide-border">
                         <div className="p-4 flex items-center justify-between">
                             <span className="text-textMuted text-xs font-mono uppercase">Repository</span>
-                            <span className="text-white font-medium">{formData.projectName}</span>
+                            <span className="text-textMain font-medium">{formData.projectName}</span>
                         </div>
                         <div className="p-4 flex items-center justify-between">
                             <span className="text-textMuted text-xs font-mono uppercase">Category</span>
-                            <span className="text-white font-medium">{formData.category}</span>
+                            <span className="text-textMain font-medium">{formData.category}</span>
                         </div>
                         <div className="p-4 flex items-center justify-between">
                             <span className="text-textMuted text-xs font-mono uppercase">Listing Price</span>
-                            <span className="text-white font-medium">${formData.price}</span>
+                            <span className="text-textMain font-medium">${formData.price}</span>
                         </div>
                         <div className="p-4">
                             <span className="text-textMuted text-xs font-mono uppercase block mb-2">Tech Specs</span>
-                            <p className="text-textMuted text-sm whitespace-pre-line font-mono text-[13px] bg-white/5 p-3 rounded border border-white/5">
+                            <p className="text-textSecondary text-sm whitespace-pre-line font-mono text-[13px] bg-surface p-3 rounded border border-border">
                                 {formData.description}
                             </p>
                         </div>
                     </div>
 
-                    <div className="flex items-start gap-3 p-4 bg-blue-500/5 border border-blue-500/10 rounded-lg">
-                        <ShieldCheck className="text-blue-400 mt-0.5 shrink-0" size={16} />
+                    <div className="flex items-start gap-3 p-4 bg-accent-tertiary/5 border border-accent-tertiary/10 rounded-lg">
+                        <ShieldCheck className="text-accent-tertiary mt-0.5 shrink-0" size={16} />
                         <div>
-                             <p className="text-sm text-white font-medium mb-1">Ownership Confirmation</p>
-                             <p className="text-xs text-textMuted leading-relaxed">
+                             <p className="text-sm text-textMain font-medium mb-1">Ownership Confirmation</p>
+                             <p className="text-xs text-textSecondary leading-relaxed">
                                 I confirm I am the original author of this code. I understand that plagiarized submissions result in an immediate, permanent ban from the marketplace.
                             </p>
                         </div>
@@ -374,9 +379,9 @@ const Submit: React.FC = () => {
               )}
 
               {/* Nav Buttons */}
-              <div className="flex items-center justify-between pt-6 mt-8 border-t border-white/5">
+              <div className="flex items-center justify-between pt-6 mt-8 border-t border-border">
                  {currentStep > 1 ? (
-                     <Button type="button" variant="ghost" onClick={handleBack} icon={<ChevronLeft size={16} />} className="text-textMuted hover:text-white">
+                     <Button type="button" variant="ghost" onClick={handleBack} icon={<ChevronLeft size={16} />} className="text-textSecondary hover:text-textMain">
                          Back
                      </Button>
                  ) : (
@@ -397,8 +402,8 @@ const Submit: React.FC = () => {
          <div className="sticky top-28 space-y-6">
             
             {/* Guidelines Card */}
-            <div className="bg-[#0A0A0B] border border-white/10 rounded-xl p-6 ring-1 ring-white/5">
-               <div className="flex items-center gap-2 mb-4 text-accent">
+            <div className="bg-surface border border-border rounded-xl p-6 shadow-sm">
+               <div className="flex items-center gap-2 mb-4 text-accent-secondary">
                   <Info size={16} />
                   <span className="text-xs font-bold uppercase tracking-wider">
                      {GUIDELINES[currentStep as keyof typeof GUIDELINES]?.title || "Guidelines"}
@@ -407,8 +412,8 @@ const Submit: React.FC = () => {
                
                <ul className="space-y-3">
                   {GUIDELINES[currentStep as keyof typeof GUIDELINES]?.points.map((point, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm text-textMuted leading-relaxed">
-                       <span className="w-1 h-1 rounded-full bg-white/30 mt-2 shrink-0"></span>
+                    <li key={i} className="flex items-start gap-3 text-sm text-textSecondary leading-relaxed">
+                       <span className="w-1 h-1 rounded-full bg-accent-secondary/50 mt-2 shrink-0"></span>
                        {point}
                     </li>
                   ))}
@@ -416,15 +421,15 @@ const Submit: React.FC = () => {
             </div>
 
             {/* Support Box */}
-            <div className="p-6 rounded-xl border border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent">
-               <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center text-textMuted mb-4">
+            <div className="p-6 rounded-xl border border-border bg-gradient-to-br from-surface to-surfaceHighlight">
+               <div className="w-10 h-10 bg-surfaceHighlight border border-border rounded-lg flex items-center justify-center text-textMuted mb-4">
                   <Cpu size={20} />
                </div>
-               <h3 className="text-white font-bold text-sm mb-2">Technical Support</h3>
-               <p className="text-textMuted text-xs leading-relaxed mb-4">
+               <h3 className="text-textMain font-bold text-sm mb-2">Technical Support</h3>
+               <p className="text-textSecondary text-xs leading-relaxed mb-4">
                   If your repo is private or requires special env keys for the audit, please email our engineering team after submission.
                </p>
-               <div className="text-xs font-mono text-white/50 border-t border-white/5 pt-3">
+               <div className="text-xs font-mono text-textMuted border-t border-border pt-3">
                   engineers@webcatalog.pro
                </div>
             </div>

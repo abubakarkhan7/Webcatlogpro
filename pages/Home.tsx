@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Check, Code, Zap, Github, Chrome, Figma, Framer, Codepen, Gitlab, Command, Box, Cpu, Search, Filter, ShieldCheck, Terminal, FileCode, GitMerge, Lock } from 'lucide-react';
+import { ArrowRight, Check, Zap, Github, Chrome, Figma, Framer, Codepen, Gitlab, Command, Box, Cpu, Search, Filter, ShieldCheck, Terminal, FileCode, GitMerge, Lock } from 'lucide-react';
 import Button from '../components/Button';
 import FeaturedCard from '../components/FeaturedCard';
+import SignatureLine from '../components/SignatureLine';
 import { ViewState } from '../types';
 import { MOCK_LISTINGS } from '../constants';
 
@@ -164,9 +165,16 @@ const HandpickedSection = ({ onListingClick, onViewMore }: { onListingClick: (id
       {/* Title Row */}
       <Reveal delay={100}>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-          <h2 className="text-4xl md:text-6xl font-display font-bold text-textMain tracking-tight">
-            Launch this weekend.
-          </h2>
+          {/* Dynamic Signature Line Wrapper */}
+          <div className="flex flex-col items-start gap-1 max-w-2xl">
+              <h2 className="text-4xl md:text-6xl font-display font-bold text-textMain tracking-tighter">
+                Launch this weekend.
+              </h2>
+              {/* Constrained width for signature */}
+              <div className="w-2/3 max-w-[240px]">
+                 <SignatureLine />
+              </div>
+          </div>
           
           <div className="flex gap-2">
              <button className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border text-textMuted hover:text-textMain hover:border-borderHover transition-all bg-surface text-[13px] font-medium">
@@ -288,7 +296,7 @@ const EngineeringStandard = () => {
         <Reveal>
             <div className="mb-16 md:flex md:justify-between md:items-end">
                <div className="max-w-2xl">
-                  <h2 className="text-3xl md:text-5xl font-display font-bold text-textMain mb-6 tracking-tight">
+                  <h2 className="text-3xl md:text-5xl font-display font-bold text-textMain mb-6 tracking-tighter">
                     We reject 95% of submissions.
                   </h2>
                   <p className="text-textMuted text-lg font-light leading-relaxed">
@@ -351,7 +359,7 @@ const Home: React.FC<HomeProps> = ({ onNavigate, onListingClick }) => {
   return (
     <main>
       {/* Hero Section */}
-      <section className="pt-32 pb-20 md:pt-48 md:pb-32 px-6 relative overflow-hidden min-h-[90vh] flex flex-col justify-center">
+      <section className="pt-40 pb-20 md:pt-48 md:pb-32 px-6 relative overflow-hidden min-h-[90vh] flex flex-col justify-center">
          {/* Ambient Background Glow */}
          <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-accent-primary/5 rounded-full blur-[160px] pointer-events-none opacity-40" />
          
@@ -363,12 +371,19 @@ const Home: React.FC<HomeProps> = ({ onNavigate, onListingClick }) => {
                 v2.4: Updated for Next.js 14 & Server Actions
              </div>
              
-             <h1 className="text-5xl md:text-8xl font-display font-bold text-textMain tracking-tighter leading-[1] mb-8">
-               Skip the first 200 hours.<br />
-               <span className="text-transparent bg-clip-text bg-gradient-to-r from-textMain via-textMain to-textMuted">
-                 Shipped in <KineticFlip words={['months.', 'weeks.', 'days.']} />
-               </span>
-             </h1>
+             {/* Constrained Headline for Dynamic Underline */}
+             <div className="w-fit mx-auto flex flex-col items-center mb-10">
+                 <h1 className="text-5xl md:text-8xl font-display font-bold text-textMain tracking-tighter leading-[1] mb-2 text-center">
+                   Skip the first 200 hours.
+                 </h1>
+                 {/* Constrain to ~50% of the heading visually */}
+                 <div className="w-1/2 min-w-[180px]">
+                    <SignatureLine />
+                 </div>
+                 <h1 className="text-5xl md:text-8xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-textMain via-textMain to-textMuted tracking-tighter leading-[1] mt-2">
+                   Shipped in <KineticFlip words={['months.', 'weeks.', 'days.']} />
+                 </h1>
+             </div>
              
              <p className="text-lg md:text-xl text-textMuted/80 max-w-xl mx-auto mb-10 leading-relaxed font-light">
                Stop wasting weeks on boilerplate. Acquire <strong>audited, type-safe</strong> full-stack architectures. Built for founders who value code quality.
@@ -416,7 +431,7 @@ const Home: React.FC<HomeProps> = ({ onNavigate, onListingClick }) => {
       <section className="py-24 px-6 max-w-7xl mx-auto">
         <Reveal>
             <div className="mb-16 md:text-center max-w-2xl mx-auto">
-                <h2 className="text-3xl md:text-5xl font-display font-bold text-textMain mb-6 tracking-tight">
+                <h2 className="text-3xl md:text-5xl font-display font-bold text-textMain mb-6 tracking-tighter">
                     Not themes. <br/>Full-stack engines.
                 </h2>
                 <p className="text-textMuted text-lg font-light leading-relaxed">
@@ -526,7 +541,7 @@ const Home: React.FC<HomeProps> = ({ onNavigate, onListingClick }) => {
             <div className="max-w-4xl mx-auto text-center bg-surface border border-border p-12 md:p-24 rounded-[32px] relative overflow-hidden shadow-2xl">
               <div className="absolute top-0 right-0 w-96 h-96 bg-accent-primary/5 blur-[100px] rounded-full pointer-events-none" />
               
-              <h2 className="text-4xl md:text-6xl font-display font-bold text-textMain mb-6 relative z-10 tracking-tight">
+              <h2 className="text-4xl md:text-6xl font-display font-bold text-textMain mb-6 relative z-10 tracking-tighter">
                 Stop reinventing auth.
               </h2>
               <p className="text-lg text-textMuted mb-10 max-w-xl mx-auto relative z-10 font-light">
